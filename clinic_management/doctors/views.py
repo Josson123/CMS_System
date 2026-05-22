@@ -54,6 +54,28 @@ def api_doctors(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['PUT', 'DELETE'])
+def api_doctor_detail(request, pk):
+
+    try:
+        doctor = Doctor.objects.get(id=pk)
+    except Doctor.DoesNotExist:
+        return Response({'error': 'Doctor not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = DoctorSerializer(doctor, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        doctor.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET', 'POST'])
 def api_specializations(request):
 
@@ -70,3 +92,29 @@ def api_specializations(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT', 'DELETE'])
+def api_specialization_detail(request, pk):
+
+    try:
+        specialization = Specialization.objects.get(id=pk)
+    except Specialization.DoesNotExist:
+        return Response({'error': 'Specialization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = SpecializationSerializer(
+            specialization,
+            data=request.data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        specialization.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

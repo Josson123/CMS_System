@@ -20,6 +20,10 @@ def api_medicines(request):
 
     if request.method == 'GET':
         medicines = Medicine.objects.all()
+
+        if request.GET.get('active') == 'true':
+            medicines = medicines.filter(is_active=True)
+
         serializer = MedicineSerializer(medicines, many=True)
         return Response(serializer.data)
 
@@ -57,12 +61,21 @@ def api_medicine_prescriptions(request):
     if request.method == 'GET':
 
         doctor_id = request.GET.get('doctor_id')
+        active_only = request.GET.get('active') == 'true'
 
         prescriptions = MedicinePrescription.objects.all()
 
         if doctor_id:
             prescriptions = prescriptions.filter(
                 appointment__doctor_id=doctor_id
+            )
+
+        if active_only:
+            prescriptions = prescriptions.filter(
+                is_active=True,
+                appointment__is_active=True,
+                appointment__patient__is_active=True,
+                appointment__doctor__is_active=True
             )
 
         serializer = MedicinePrescriptionSerializer(

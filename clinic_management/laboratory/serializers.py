@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from .models import LabTest, LabTestPrescription
+from .models import LabTestCategory, LabTest, LabTestPrescription
+
+
+class LabTestCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LabTestCategory
+        fields = '__all__'
 
 
 class LabTestSerializer(serializers.ModelSerializer):
@@ -27,6 +33,16 @@ class LabTestPrescriptionSerializer(serializers.ModelSerializer):
 
     lab_test_name = serializers.CharField(
         source='lab_test.test_name',
+        read_only=True
+    )
+
+    reference_min_range = serializers.CharField(
+        source='lab_test.reference_min_range',
+        read_only=True
+    )
+
+    reference_max_range = serializers.CharField(
+        source='lab_test.reference_max_range',
         read_only=True
     )
 
