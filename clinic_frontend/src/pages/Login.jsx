@@ -52,21 +52,14 @@ function Login() {
   return (
 
     <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        height: '100vh',
-        backgroundColor: '#f5f5f5'
-      }}
+      className="login-screen"
     >
 
       <div
-        className="card p-4 shadow"
-        style={{
-          width: '400px'
-        }}
+        className="card p-4 login-panel"
       >
 
-        <h3 className="mb-4 text-center">
+        <h3 className="mb-4 text-center card-title">
           Clinic CMS Login
         </h3>
 

@@ -3,26 +3,41 @@ import axios from 'axios'
 
 function DispenseMedicine() {
 
-  const [medicines, setMedicines] = useState([])
+  const [prescriptions, setPrescriptions] = useState([])
 
   const [formData, setFormData] = useState({
+    prescription: '',
     medicine: '',
     quantity: ''
   })
 
   useEffect(() => {
-    fetchMedicines()
+    fetchPrescriptions()
   }, [])
 
-  const fetchMedicines = async () => {
+  const fetchPrescriptions = async () => {
     const response = await axios.get(
-      'http://127.0.0.1:8000/api/medicines/'
+      'http://127.0.0.1:8000/api/medicine-prescriptions/?active=true'
     )
 
-    setMedicines(response.data)
+    setPrescriptions(response.data)
   }
 
   const handleChange = (e) => {
+    if (e.target.name === 'prescription') {
+      const selectedPrescription = prescriptions.find(
+        (item) => String(item.id) === e.target.value
+      )
+
+      setFormData({
+        ...formData,
+        prescription: e.target.value,
+        medicine: selectedPrescription?.medicine || ''
+      })
+
+      return
+    }
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -44,6 +59,7 @@ function DispenseMedicine() {
       alert('Medicine Dispensed Successfully')
 
       setFormData({
+        prescription: '',
         medicine: '',
         quantity: ''
       })
@@ -57,22 +73,33 @@ function DispenseMedicine() {
     <div>
       <h2 className="mb-4">Dispense Medicine</h2>
 
+      {formData.prescription && (
+        <div className="alert alert-info">
+          <strong>Patient:</strong>{' '}
+          {prescriptions.find((item) => String(item.id) === formData.prescription)?.patient_name || 'Unknown'}
+          {' '}| <strong>Medicine:</strong>{' '}
+          {prescriptions.find((item) => String(item.id) === formData.prescription)?.medicine_name || 'Unknown'}
+          {' '}| <strong>Frequency:</strong>{' '}
+          {prescriptions.find((item) => String(item.id) === formData.prescription)?.frequency || 'Unknown'}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
 
         <div className="mb-3">
-          <label>Medicine</label>
+          <label>Prescription</label>
           <select
-            name="medicine"
+            name="prescription"
             className="form-control"
-            value={formData.medicine}
+            value={formData.prescription}
             onChange={handleChange}
             required
           >
-            <option value="">Select Medicine</option>
+            <option value="">Select Prescription</option>
 
-            {medicines.map((medicine) => (
-              <option key={medicine.id} value={medicine.id}>
-                {medicine.medicine_name}
+            {prescriptions.map((prescription) => (
+              <option key={prescription.id} value={prescription.id}>
+                {prescription.patient_name} - {prescription.medicine_name} - {prescription.frequency}
               </option>
             ))}
           </select>

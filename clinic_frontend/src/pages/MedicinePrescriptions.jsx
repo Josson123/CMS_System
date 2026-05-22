@@ -44,6 +44,7 @@ function MedicinePrescriptions() {
             <th>Doctor</th>
             <th>Medicine</th>
             <th>Dosage</th>
+            <th>Frequency</th>
             <th>Duration</th>
           </tr>
 
@@ -71,6 +72,10 @@ function MedicinePrescriptions() {
 
               <td>
                 {prescription.dosage}
+              </td>
+
+              <td>
+                {prescription.frequency}
               </td>
 
               <td>

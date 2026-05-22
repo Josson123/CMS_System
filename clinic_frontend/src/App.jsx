@@ -16,12 +16,17 @@ import MedicineStocks from './pages/MedicineStocks'
 import MedicinePrescriptions from './pages/MedicinePrescriptions'
 import AddMedicinePrescription from './pages/AddMedicinePrescription'
 import LabTests from './pages/LabTests'
+import LabTestCategories from './pages/LabTestCategories'
+import AddLabTest from './pages/AddLabTest'
 import LabPrescriptions from './pages/LabPrescriptions'
 import AddLabPrescription from './pages/AddLabPrescription'
 import UpdateLabResult from './pages/UpdateLabResult'
 import Bills from './pages/Bills'
 import AddBill from './pages/AddBill'
 import DispenseMedicine from './pages/DispenseMedicine'
+import AddMedicineStock from './pages/AddMedicineStock'
+import AdminStaffManagement from './pages/AdminStaffManagement'
+import AdminDoctorManagement from './pages/AdminDoctorManagement'
 
 function App() {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -34,10 +39,10 @@ function App() {
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       ) : (
-        <div className="d-flex">
+        <div className="app-shell">
           <Sidebar />
 
-          <div className="p-4" style={{ width: '100%' }}>
+          <div className="content-shell">
             <Routes>
               <Route path="/" element={<Dashboard />} />
 
@@ -132,6 +137,15 @@ function App() {
               />
 
               <Route
+                path="/add-medicine-stock"
+                element={
+                  <ProtectedRoute allowedRoles={['Pharmacist', 'Administrator']}>
+                    <AddMedicineStock />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/medicine-prescriptions"
                 element={
                   <ProtectedRoute allowedRoles={['Doctor', 'Pharmacist', 'Administrator']}>
@@ -154,6 +168,24 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles={['Lab Technician', 'Administrator']}>
                     <LabTests />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/lab-test-categories"
+                element={
+                  <ProtectedRoute allowedRoles={['Lab Technician', 'Administrator']}>
+                    <LabTestCategories />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/add-lab-test"
+                element={
+                  <ProtectedRoute allowedRoles={['Lab Technician', 'Administrator']}>
+                    <AddLabTest />
                   </ProtectedRoute>
                 }
               />
@@ -190,6 +222,24 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles={['Pharmacist', 'Administrator']}>
                     <DispenseMedicine />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/staff"
+                element={
+                  <ProtectedRoute allowedRoles={['Administrator']}>
+                    <AdminStaffManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/admin/doctors"
+                element={
+                  <ProtectedRoute allowedRoles={['Administrator']}>
+                    <AdminDoctorManagement />
                   </ProtectedRoute>
                 }
               />

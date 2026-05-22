@@ -13,24 +13,20 @@ function Sidebar() {
 
   return (
     <div
-      className="bg-dark text-white p-3"
-      style={{
-        width: '250px',
-        minHeight: '100vh'
-      }}
+      className="cms-sidebar"
     >
-      <h4 className="mb-4">Clinic CMS</h4>
+      <h4 className="sidebar-title">Clinic CMS</h4>
 
-      <p>
+      <p className="sidebar-user">
         Welcome,<br />
         <strong>{user?.full_name}</strong>
       </p>
 
-      <hr />
+      <hr className="sidebar-divider" />
 
-      <ul className="nav flex-column">
+      <ul className="sidebar-nav">
         <li className="nav-item mb-2">
-          <Link className="nav-link text-white" to="/">
+          <Link className="nav-link" to="/">
             Dashboard
           </Link>
         </li>
@@ -38,37 +34,37 @@ function Sidebar() {
         {(role === 'Receptionist' || role === 'Administrator') && (
           <>
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/patients">
+              <Link className="nav-link" to="/patients">
                 Patients
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/add-patient">
+              <Link className="nav-link" to="/add-patient">
                 Add Patient
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/appointments">
+              <Link className="nav-link" to="/appointments">
                 Appointments
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/add-appointment">
+              <Link className="nav-link" to="/add-appointment">
                 Add Appointment
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/bills">
+              <Link className="nav-link" to="/bills">
                 Billing
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/add-bill">
+              <Link className="nav-link" to="/add-bill">
                 Add Bill
               </Link>
             </li>
@@ -78,43 +74,43 @@ function Sidebar() {
         {(role === 'Doctor' || role === 'Administrator') && (
           <>
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/appointments">
+              <Link className="nav-link" to="/appointments">
                 My Appointments
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/consultations">
+              <Link className="nav-link" to="/consultations">
                 Consultations
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/add-consultation">
+              <Link className="nav-link" to="/add-consultation">
                 Add Consultation
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/medicine-prescriptions">
+              <Link className="nav-link" to="/medicine-prescriptions">
                 Medicine Prescriptions
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/add-medicine-prescription">
+              <Link className="nav-link" to="/add-medicine-prescription">
                 Add Medicine Prescription
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/lab-prescriptions">
+              <Link className="nav-link" to="/lab-prescriptions">
                 Lab Prescriptions
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/add-lab-prescription">
+              <Link className="nav-link" to="/add-lab-prescription">
                 Add Lab Prescription
               </Link>
             </li>
@@ -124,25 +120,31 @@ function Sidebar() {
         {(role === 'Pharmacist' || role === 'Administrator') && (
           <>
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/medicines">
+              <Link className="nav-link" to="/medicines">
                 Medicines
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/medicine-stocks">
+              <Link className="nav-link" to="/medicine-stocks">
                 Medicine Stock
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/medicine-prescriptions">
+              <Link className="nav-link" to="/add-medicine-stock">
+                Add Medicine Stock
+              </Link>
+            </li>
+
+            <li className="nav-item mb-2">
+              <Link className="nav-link" to="/medicine-prescriptions">
                 Medicine Prescriptions
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/dispense-medicine">
+              <Link className="nav-link" to="/dispense-medicine">
                 Dispense Medicine
               </Link>
             </li>
@@ -152,20 +154,52 @@ function Sidebar() {
         {(role === 'Lab Technician' || role === 'Administrator') && (
           <>
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/labtests">
+              <Link className="nav-link" to="/labtests">
                 Lab Tests
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/lab-prescriptions">
+              <Link className="nav-link" to="/lab-test-categories">
+                Lab Test Categories
+              </Link>
+            </li>
+
+            <li className="nav-item mb-2">
+              <Link className="nav-link" to="/add-lab-test">
+                Add Lab Test
+              </Link>
+            </li>
+
+            <li className="nav-item mb-2">
+              <Link className="nav-link" to="/lab-prescriptions">
                 Lab Prescriptions
               </Link>
             </li>
 
             <li className="nav-item mb-2">
-              <Link className="nav-link text-white" to="/update-lab-result">
+              <Link className="nav-link" to="/update-lab-result">
                 Update Lab Result
+              </Link>
+            </li>
+          </>
+        )}
+
+        {role === 'Administrator' && (
+          <>
+            <li className="nav-item mb-2 mt-3">
+              <span className="sidebar-section-label">Administration</span>
+            </li>
+
+            <li className="nav-item mb-2">
+              <Link className="nav-link" to="/admin/staff">
+                Manage Staff
+              </Link>
+            </li>
+
+            <li className="nav-item mb-2">
+              <Link className="nav-link" to="/admin/doctors">
+                Manage Doctors
               </Link>
             </li>
           </>
@@ -173,7 +207,7 @@ function Sidebar() {
       </ul>
 
       <button
-        className="btn btn-danger mt-4 w-100"
+        className="btn btn-danger mt-4 w-100 sidebar-logout"
         onClick={logout}
       >
         Logout
