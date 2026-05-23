@@ -1,15 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function Sidebar() {
-  const navigate = useNavigate()
   const user = JSON.parse(localStorage.getItem('user'))
   const role = user?.role
-
-  const logout = () => {
-    localStorage.removeItem('user')
-    navigate('/login')
-    window.location.reload()
-  }
 
   return (
     <div
@@ -206,12 +199,10 @@ function Sidebar() {
         )}
       </ul>
 
-      <button
-        className="btn btn-danger mt-4 w-100 sidebar-logout"
-        onClick={logout}
-      >
-        Logout
-      </button>
+      <div className="sidebar-footer">
+        <strong>Secure access</strong>
+        <div>Signed in as {user?.role}</div>
+      </div>
     </div>
   )
 }

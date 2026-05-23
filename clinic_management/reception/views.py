@@ -48,6 +48,28 @@ def api_patients(request):
         )
 
 
+@api_view(['PUT', 'DELETE'])
+def api_patient_detail(request, pk):
+
+    try:
+        patient = Patient.objects.get(id=pk)
+    except Patient.DoesNotExist:
+        return Response({'error': 'Patient not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = PatientSerializer(patient, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        patient.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET', 'POST'])
 def api_appointments(request):
 
@@ -87,6 +109,28 @@ def api_appointments(request):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(['PUT', 'DELETE'])
+def api_appointment_detail(request, pk):
+
+    try:
+        appointment = Appointment.objects.get(id=pk)
+    except Appointment.DoesNotExist:
+        return Response({'error': 'Appointment not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = AppointmentSerializer(appointment, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        appointment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 def calculate_bill_amounts(appointment):
@@ -228,3 +272,25 @@ def api_bills(request):
                 {"error": "Appointment not found"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+@api_view(['PUT', 'DELETE'])
+def api_bill_detail(request, pk):
+
+    try:
+        bill = ConsultationBill.objects.get(id=pk)
+    except ConsultationBill.DoesNotExist:
+        return Response({'error': 'Bill not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = ConsultationBillSerializer(bill, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        bill.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

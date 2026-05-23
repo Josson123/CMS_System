@@ -36,6 +36,28 @@ def api_consultations(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['PUT', 'DELETE'])
+def api_consultation_detail(request, pk):
+
+    try:
+        consultation = Consultation.objects.get(id=pk)
+    except Consultation.DoesNotExist:
+        return Response({'error': 'Consultation not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = ConsultationSerializer(consultation, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        consultation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET', 'POST'])
 def api_doctors(request):
 

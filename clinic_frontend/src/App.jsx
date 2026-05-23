@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import Sidebar from './components/Sidebar'
+import TopNavbar from './components/TopNavbar'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import Login from './pages/Login'
@@ -42,8 +43,11 @@ function App() {
         <div className="app-shell">
           <Sidebar />
 
-          <div className="content-shell">
-            <Routes>
+          <div className="workspace-shell">
+            <TopNavbar />
+
+            <main className="workspace-main">
+              <Routes>
               <Route path="/" element={<Dashboard />} />
 
               <Route
@@ -244,8 +248,9 @@ function App() {
                 }
               />
 
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </main>
           </div>
         </div>
       )}

@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import SearchBar from '../components/SearchBar'
+import { matchesSearch } from '../utils/search'
 
 function LabPrescriptions() {
 
   const [prescriptions, setPrescriptions] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchPrescriptions()
@@ -32,9 +38,27 @@ function LabPrescriptions() {
     }
   }
 
+  const filteredPrescriptions = prescriptions.filter((item) => matchesSearch(item, searchTerm))
+
+  const editResult = (id) => {
+    localStorage.setItem('labPrescriptionEditId', String(id))
+    navigate('/update-lab-result')
+  }
+
   return (
     <div>
       <h2 className="mb-4">Lab Test Prescriptions</h2>
+
+      <SearchBar
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        onSubmit={() => setSearchTerm(searchInput)}
+        onClear={() => {
+          setSearchInput('')
+          setSearchTerm('')
+        }}
+        placeholder="Search prescriptions"
+      />
 
       <table className="table table-bordered table-striped">
         <thead className="table-dark">
@@ -45,11 +69,16 @@ function LabPrescriptions() {
             <th>Lab Test</th>
             <th>Result</th>
             <th>Remarks</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          {prescriptions.map((item) => (
+          {filteredPrescriptions.length === 0 ? (
+            <tr>
+              <td className="text-center" colSpan={6}>No lab prescriptions found.</td>
+            </tr>
+          ) : filteredPrescriptions.map((item) => (
             <tr key={item.id}>
               <td>{item.id}</td>
               <td>{item.patient_name}</td>
@@ -57,6 +86,9 @@ function LabPrescriptions() {
               <td>{item.lab_test_name}</td>
               <td>{item.lab_test_value}</td>
               <td>{item.remarks}</td>
+              <td>
+                <button className="btn btn-sm btn-warning" onClick={() => editResult(item.id)}>Edit Result</button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,10 +1,17 @@
 from rest_framework import serializers
 
 from .models import (
+    MedicineCategory,
     Medicine,
     MedicineStock,
     MedicinePrescription
 )
+
+
+class MedicineCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MedicineCategory
+        fields = '__all__'
 
 
 class MedicineSerializer(serializers.ModelSerializer):

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import SearchBar from '../components/SearchBar'
+import { matchesSearch } from '../utils/search'
 
 function AdminDoctorManagement() {
 
@@ -16,6 +18,8 @@ function AdminDoctorManagement() {
   const [formData, setFormData] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
   const [specializationName, setSpecializationName] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     fetchStaffOptions()
@@ -37,6 +41,8 @@ function AdminDoctorManagement() {
     const response = await axios.get('http://127.0.0.1:8000/api/doctors/')
     setDoctors(response.data)
   }
+
+  const filteredDoctors = doctors.filter((doctor) => matchesSearch(doctor, searchTerm))
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -191,6 +197,17 @@ function AdminDoctorManagement() {
         <div className="card-body">
           <h5 className="card-title">Doctor Profiles</h5>
 
+          <SearchBar
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onSubmit={() => setSearchTerm(searchInput)}
+            onClear={() => {
+              setSearchInput('')
+              setSearchTerm('')
+            }}
+            placeholder="Search doctors"
+          />
+
           <table className="table table-bordered table-striped">
             <thead className="table-dark">
               <tr>
@@ -204,7 +221,11 @@ function AdminDoctorManagement() {
             </thead>
 
             <tbody>
-              {doctors.map((doctor) => (
+              {filteredDoctors.length === 0 ? (
+                <tr>
+                  <td className="text-center" colSpan={6}>No doctors found.</td>
+                </tr>
+              ) : filteredDoctors.map((doctor) => (
                 <tr key={doctor.id}>
                   <td>{doctor.id}</td>
                   <td>{doctor.staff_name}</td>

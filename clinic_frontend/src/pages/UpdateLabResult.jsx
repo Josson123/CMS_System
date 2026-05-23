@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import SearchBar from '../components/SearchBar'
+import { matchesSearch } from '../utils/search'
 
 function UpdateLabResult() {
 
   const [prescriptions, setPrescriptions] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [formData, setFormData] = useState({
     prescription_id: '',
@@ -15,6 +19,17 @@ function UpdateLabResult() {
     fetchPrescriptions()
   }, [])
 
+  useEffect(() => {
+    const presetId = localStorage.getItem('labPrescriptionEditId')
+    if (presetId) {
+      setFormData((current) => ({
+        ...current,
+        prescription_id: presetId
+      }))
+      localStorage.removeItem('labPrescriptionEditId')
+    }
+  }, [])
+
   const fetchPrescriptions = async () => {
     const response = await axios.get(
       'http://127.0.0.1:8000/api/labtest-prescriptions/'
@@ -22,6 +37,8 @@ function UpdateLabResult() {
 
     setPrescriptions(response.data)
   }
+
+  const filteredPrescriptions = prescriptions.filter((item) => matchesSearch(item, searchTerm))
 
   const handleChange = (e) => {
     setFormData({
@@ -60,6 +77,17 @@ function UpdateLabResult() {
     <div>
       <h2 className="mb-4">Update Lab Result</h2>
 
+      <SearchBar
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        onSubmit={() => setSearchTerm(searchInput)}
+        onClear={() => {
+          setSearchInput('')
+          setSearchTerm('')
+        }}
+        placeholder="Search prescriptions"
+      />
+
       <form onSubmit={handleSubmit}>
 
         <div className="mb-3">
@@ -73,7 +101,7 @@ function UpdateLabResult() {
           >
             <option value="">Select Prescription</option>
 
-            {prescriptions.map((item) => (
+            {filteredPrescriptions.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.patient_name} - {item.lab_test_name}
               </option>

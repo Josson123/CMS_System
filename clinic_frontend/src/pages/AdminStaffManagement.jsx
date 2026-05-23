@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import SearchBar from '../components/SearchBar'
+import { matchesSearch } from '../utils/search'
 
 function AdminStaffManagement() {
 
@@ -18,6 +20,8 @@ function AdminStaffManagement() {
   const [staffs, setStaffs] = useState([])
   const [formData, setFormData] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     fetchRoles()
@@ -33,6 +37,8 @@ function AdminStaffManagement() {
     const response = await axios.get('http://127.0.0.1:8000/api/staff/')
     setStaffs(response.data)
   }
+
+  const filteredStaffs = staffs.filter((staff) => matchesSearch(staff, searchTerm))
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -166,6 +172,17 @@ function AdminStaffManagement() {
         <div className="card-body">
           <h5 className="card-title">Staff List</h5>
 
+          <SearchBar
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onSubmit={() => setSearchTerm(searchInput)}
+            onClear={() => {
+              setSearchInput('')
+              setSearchTerm('')
+            }}
+            placeholder="Search staff"
+          />
+
           <table className="table table-bordered table-striped">
             <thead className="table-dark">
               <tr>
@@ -180,7 +197,11 @@ function AdminStaffManagement() {
             </thead>
 
             <tbody>
-              {staffs.map((staff) => (
+              {filteredStaffs.length === 0 ? (
+                <tr>
+                  <td className="text-center" colSpan={7}>No staff accounts found.</td>
+                </tr>
+              ) : filteredStaffs.map((staff) => (
                 <tr key={staff.id}>
                   <td>{staff.id}</td>
                   <td>{staff.full_name}</td>

@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import SearchBar from '../components/SearchBar'
+import { matchesSearch } from '../utils/search'
 
 function LabTests() {
 
   const [labtests, setLabtests] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   const [editingId, setEditingId] = useState(null)
 
@@ -36,6 +40,8 @@ function LabTests() {
 
     }
   }
+
+  const filteredLabTests = labtests.filter((labtest) => matchesSearch(labtest, searchTerm))
 
   const startEdit = (labtest) => {
     setEditingId(labtest.id)
@@ -86,6 +92,17 @@ function LabTests() {
         <a className="btn btn-primary" href="/add-lab-test">Add Lab Category/Test</a>
       </div>
 
+      <SearchBar
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        onSubmit={() => setSearchTerm(searchInput)}
+        onClear={() => {
+          setSearchInput('')
+          setSearchTerm('')
+        }}
+        placeholder="Search lab tests"
+      />
+
       <table className="table table-bordered table-striped">
 
         <thead className="table-dark">
@@ -103,7 +120,11 @@ function LabTests() {
 
         <tbody>
 
-          {labtests.map((labtest) => (
+          {filteredLabTests.length === 0 ? (
+            <tr>
+              <td className="text-center" colSpan={8}>No lab tests found.</td>
+            </tr>
+          ) : filteredLabTests.map((labtest) => (
 
             <tr key={labtest.id}>
 

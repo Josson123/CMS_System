@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import SearchBar from '../components/SearchBar'
+import { matchesSearch } from '../utils/search'
 
 function LabTestCategories() {
 
   const [categories, setCategories] = useState([])
   const [name, setName] = useState('')
   const [editingId, setEditingId] = useState(null)
+  const [searchInput, setSearchInput] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     fetchCategories()
@@ -15,6 +19,8 @@ function LabTestCategories() {
     const response = await axios.get('http://127.0.0.1:8000/api/labtest-categories/')
     setCategories(response.data)
   }
+
+  const filteredCategories = categories.filter((category) => matchesSearch(category, searchTerm))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -86,6 +92,17 @@ function LabTestCategories() {
         </div>
       </div>
 
+      <SearchBar
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        onSubmit={() => setSearchTerm(searchInput)}
+        onClear={() => {
+          setSearchInput('')
+          setSearchTerm('')
+        }}
+        placeholder="Search categories"
+      />
+
       <table className="table table-bordered table-striped">
         <thead className="table-dark">
           <tr>
@@ -96,7 +113,11 @@ function LabTestCategories() {
         </thead>
 
         <tbody>
-          {categories.map((category) => (
+          {filteredCategories.length === 0 ? (
+            <tr>
+              <td className="text-center" colSpan={3}>No categories found.</td>
+            </tr>
+          ) : filteredCategories.map((category) => (
             <tr key={category.id}>
               <td>{category.id}</td>
               <td>{category.lab_test_category_name}</td>

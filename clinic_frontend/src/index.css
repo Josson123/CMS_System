@@ -29,6 +29,7 @@ body {
     radial-gradient(circle at 0% 110%, rgba(30, 155, 159, 0.24), transparent 35%),
     linear-gradient(120deg, #f8fafc 0%, #ecf3f8 100%);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1,
@@ -51,18 +52,25 @@ h5 {
   min-height: 100vh;
 }
 
-.content-shell {
-  width: 100%;
-  padding: 1.5rem;
+.workspace-shell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  margin-left: 300px;
+  min-width: 0;
 }
 
-.content-shell > * {
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.86);
-  border-radius: 22px;
+.workspace-main {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: 24px;
   box-shadow: var(--shadow-soft);
   padding: 1.25rem;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(6px);
+  min-width: 0;
 }
 
 .cms-sidebar {
@@ -74,6 +82,12 @@ h5 {
     linear-gradient(175deg, #0f172e 0%, #192245 50%, #12202c 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   padding: 1.2rem 1rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .sidebar-title {
@@ -128,15 +142,116 @@ h5 {
   letter-spacing: 1.2px;
 }
 
-.sidebar-logout {
-  border-radius: 12px;
-  border: 0;
-  background: linear-gradient(135deg, #c73f4d 0%, #de5c66 100%);
-  box-shadow: 0 10px 25px rgba(199, 63, 77, 0.35);
+.sidebar-footer {
+  margin-top: 1.2rem;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(245, 248, 255, 0.82);
+  font-size: 0.9rem;
 }
 
-.sidebar-logout:hover {
-  filter: brightness(1.06);
+.sidebar-footer strong {
+  color: #fff;
+}
+
+.app-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(8px);
+}
+
+.navbar-brand-wrap,
+.navbar-user-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.navbar-brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar-brand-link:hover {
+  color: inherit;
+}
+
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--brand-700) 0%, var(--brand-500) 100%);
+  box-shadow: 0 12px 24px rgba(30, 155, 159, 0.3);
+}
+
+.brand-name {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.brand-subtitle {
+  display: block;
+  color: var(--ink-700);
+  font-size: 0.88rem;
+}
+
+.navbar-date {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(30, 155, 159, 0.1);
+  color: #0f6d6f;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.navbar-user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.navbar-user-role {
+  display: inline-flex;
+  align-self: flex-end;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(95, 112, 222, 0.12);
+  color: #3744a5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.navbar-user-card strong {
+  color: var(--ink-900);
+}
+
+.navbar-logout {
+  border-radius: 999px;
+  padding-inline: 1rem;
 }
 
 .dashboard-grid {
@@ -290,15 +405,29 @@ select.form-control:focus {
   .cms-sidebar {
     width: 100%;
     min-height: auto;
+    height: auto;
+    position: static;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   }
 
-  .content-shell {
+  .workspace-shell {
+    margin-left: 0;
     padding: 1rem;
   }
 
-  .content-shell > * {
+  .workspace-main,
+  .app-navbar {
     padding: 1rem;
+  }
+
+  .app-navbar,
+  .navbar-brand-wrap,
+  .navbar-user-wrap {
+    align-items: flex-start;
+  }
+
+  .navbar-user-card {
+    align-items: flex-start;
   }
 }
